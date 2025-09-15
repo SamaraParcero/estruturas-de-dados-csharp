@@ -30,7 +30,7 @@ public class Fila
     {
         if (Tamanho == Capacidade)
         {
-            Console.WriteLine("A fila estás cheia");
+            throw new InvalidOperationException("Fila cheia");
         }
         else
         {
@@ -47,7 +47,7 @@ public class Fila
     {
         if (Tamanho == 0)
         {
-            Console.WriteLine("A fila está vazia");
+            throw new InvalidOperationException("Fila vazia");
         }
         else
         {
@@ -60,21 +60,24 @@ public class Fila
         }
     }
 
-    public void VerQueue()
+    public int[] VerQueue()
     {
         if (Tamanho == 0)
         {
-            Console.WriteLine("A fila está vazia");
-            return;
+            throw new InvalidOperationException("Fila vazia");
         }
 
+        var resultado = new int[Tamanho];
         for (int i = 0; i < Tamanho; i++)
         {
             int index = (Inicio + i) % Capacidade;
+            resultado[i] = Fileira[index];
             Console.WriteLine(Fileira[index]);
         }
+
+        return resultado;
     }
-    
-    
+
+
 
 }

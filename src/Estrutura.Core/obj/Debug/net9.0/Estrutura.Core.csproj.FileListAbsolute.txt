@@ -9,3 +9,4 @@ G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.Core\obj\Debug\net9.0\Est
 G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.Core\obj\Debug\net9.0\refint\Estrutura.Core.dll
 G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.Core\obj\Debug\net9.0\Estrutura.Core.pdb
 G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.Core\obj\Debug\net9.0\ref\Estrutura.Core.dll
+G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.Core\obj\Debug\net9.0\Estrutura.Core.sourcelink.json

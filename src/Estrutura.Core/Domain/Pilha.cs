@@ -29,7 +29,7 @@ public class Pilha
     {
         if (Tamanho == Capacidade)
         {
-            Console.WriteLine("A pilha está cheia");
+            throw new InvalidOperationException("A Pilha está cheia!");
         }
         else
         {
@@ -44,7 +44,7 @@ public class Pilha
     {
         if (Tamanho == 0)
         {
-            Console.WriteLine("A Pilha está vazia");
+            throw new InvalidOperationException("A Pilha está vazia");
         }
         else
         {
@@ -56,21 +56,25 @@ public class Pilha
 
     }
 
-    public void VerTop()
+    public int VerTop()
     {
         var top = Pilhas[Topo];
         Console.WriteLine("Topo da pilha:" + top);
+        return top;
     }
 
-    public void VerDeck()
+    public int[] VerDeck()
     {
+        var resultado = new int[Tamanho];
         for (int i = 0; i < Tamanho; i++)
         {
+            resultado[i] = Pilhas[i];
             Console.WriteLine(Pilhas[i]);
         }
+        return resultado;
     }
 
 
-    
+
 
 }

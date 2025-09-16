@@ -33,7 +33,7 @@ public class FilaUnitTests
         Fila fila = new Fila(3);
         var tamanho = fila.Tamanho;
         fila.Queue(2);
-        Assert.Equal(fila.Tamanho, tamanho + 1);
+        Assert.Equal(tamanho + 1, fila.Tamanho);
     }
 
 
@@ -85,7 +85,7 @@ public class FilaUnitTests
         fila.Queue(4);
         var tamanho = fila.Tamanho;
         fila.Dequeue();
-        Assert.Equal(fila.Tamanho, tamanho - 1);
+        Assert.Equal(tamanho - 1, fila.Tamanho);
     }
 
 

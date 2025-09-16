@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Estrutura.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a76e40611437357f2c328bcae30c3235b2039a1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce6ccfa9edc587b59b7ce0c01ccf543c3ad962bb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Estrutura.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Estrutura.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

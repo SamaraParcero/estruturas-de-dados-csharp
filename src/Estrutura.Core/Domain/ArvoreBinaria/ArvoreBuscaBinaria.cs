@@ -13,7 +13,7 @@ public class ArvoreBuscaBinaria
     }
 
 
-    public void Insert(int valor)
+    public No Insert(int valor)
     {
         No no = new No(valor);
 
@@ -26,6 +26,8 @@ public class ArvoreBuscaBinaria
         {
             InsertRecursivo(Raiz, no);
         }
+
+        return no;
     }
 
     private void InsertRecursivo(No atual, No no)
@@ -60,18 +62,20 @@ public class ArvoreBuscaBinaria
         }
     }
 
-    public void PercorrerEmOrdemArvore()
+    public List<int> PercorrerEmOrdemArvore()
     {
-        PercorrerEmOrdemArvoreRecursivo(Raiz);
+        List<int> nos = new List<int>();
+        PercorrerEmOrdemArvoreRecursivo(Raiz, nos);
+        return nos;
     }
 
-    private void PercorrerEmOrdemArvoreRecursivo(No no)
+    private void PercorrerEmOrdemArvoreRecursivo(No no, List<int> nos)
     {
         if (no != null)
         {
-            PercorrerEmOrdemArvoreRecursivo(no.Esquerda);
-            Console.WriteLine(no.Valor + " ");
-            PercorrerEmOrdemArvoreRecursivo(no.Direita);
+            PercorrerEmOrdemArvoreRecursivo(no.Esquerda,nos);
+            nos.Add(no.Valor);
+            PercorrerEmOrdemArvoreRecursivo(no.Direita, nos);
         }
     }
 
@@ -113,7 +117,7 @@ public class ArvoreBuscaBinaria
             }
             else
             {
-                No sucessor = EncontrarMenorNo(noAtual.Direita); 
+                No sucessor = EncontrarMenorNo(noAtual.Direita);
                 noAtual.Valor = sucessor.Valor;
                 noAtual.Direita = RemoveRecursivo(noAtual.Direita, sucessor.Valor);
             }

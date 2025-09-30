@@ -16,3 +16,4 @@ G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.TestsConsole\obj\Debug\ne
 G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.TestsConsole\obj\Debug\net9.0\Estrutura.TestsConsole.pdb
 G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.TestsConsole\obj\Debug\net9.0\Estrutura.TestsConsole.genruntimeconfig.cache
 G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.TestsConsole\obj\Debug\net9.0\ref\Estrutura.TestsConsole.dll
+G:\ProjetosGithub\estrutura-dados-csharp\src\Estrutura.TestsConsole\obj\Debug\net9.0\Estrutura.TestsConsole.sourcelink.json

@@ -71,23 +71,22 @@ public class Queuee<T>
         size = 0;
     }
 
-
-
-    public List<T> ViewQueue()
+    public bool Contains(T value)
     {
-        List<T> nodes = new List<T>();
         var actual = head;
-
         while (actual != null)
         {
-            nodes.Add(actual.Value);
-            //Console.Write(actual.Value + " ");
+            if (EqualityComparer<T>.Default.Equals(actual.Value, value))
+            {
+                return true;
+            }
             actual = actual.Next;
-
         }
-
-        return nodes;
+        return false;
     }
+
+
+
 
 
 

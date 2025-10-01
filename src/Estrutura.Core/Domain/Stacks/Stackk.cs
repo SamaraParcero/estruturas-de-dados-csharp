@@ -56,18 +56,20 @@ public class Stackk<T>
         size = 0;
     }
 
-
-    public List<T> ViewStack()
+    public bool Contains(T value)
     {
-        var stack = new List<T>();
         var actual = top;
         while (actual != null)
         {
-            //Console.WriteLine(actual.Value);
-            stack.Add(actual.Value);
+            if (EqualityComparer<T>.Default.Equals(actual.Value, value))
+            {
+                return true;
+            }
             actual = actual.Next;
         }
-        return stack;
+        return false;
     }
+
+
 
 }

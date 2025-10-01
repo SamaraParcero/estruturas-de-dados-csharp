@@ -135,26 +135,7 @@ public class StackUnitTests
     }
 
     [Fact]
-    public void Test11StackViewStackReturnsCorrectListOrder()
-    {
-        Stackk<int> stack = new Stackk<int>();
-        int pushNodeValue = 1;
-        int pushNodeValue2 = 3;
-        int pushNodeValue3 = 2;
-
-        stack.Push(pushNodeValue);
-        stack.Push(pushNodeValue2);
-        stack.Push(pushNodeValue3);
-
-        var result = stack.ViewStack();
-        var expected = new List<int> { pushNodeValue3, pushNodeValue2, pushNodeValue };
-        Assert.Equal(expected, result);
-    }
-
-
-
-    [Fact]
-    public void Test12PushOtherTypeOfNode()
+    public void Test11PushOtherTypeOfNode()
     {
         Stackk<string> stack = new Stackk<string>();
         string a = "A";
@@ -192,12 +173,33 @@ public class StackUnitTests
         stack.Push(pushedNodeValue4);
         testSize++;
         Assert.Equal(testSize, stack.Count);
-        var resultBefore = stack.ViewStack();
-        var expectedBefore = new List<int> { pushedNodeValue4, pushedNodeValue2, pushedNodeValue };
-        Assert.Equal(expectedBefore, resultBefore);
+        Assert.False(stack.IsEmpty());
         stack.Clear();
-        Assert.Empty(stack.ViewStack());
         Assert.True(stack.IsEmpty());
         Assert.Equal(0, stack.Count); ;
+    }
+
+     [Fact]
+    public void Test14StackContaisValue()
+    {
+        Stackk<int> stack = new Stackk<int>();
+        int pushedValue = 10;
+        stack.Push(5);
+        stack.Push(pushedValue);
+        stack.Push(20);
+        var containsResult = stack.Contains(pushedValue);
+        Assert.True(containsResult);
+    }
+
+    [Fact]
+    public void Test15StackDoesNotContaisValue()
+    {
+        Stackk<int> stack = new Stackk<int>();
+        int notEnqueuedValue = 10;
+        stack.Push(5);
+        stack.Push(11);
+        stack.Push(20);
+        var containsResult = stack.Contains(notEnqueuedValue);
+        Assert.False(containsResult);
     }
 }

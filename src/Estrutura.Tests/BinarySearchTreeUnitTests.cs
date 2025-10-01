@@ -1,13 +1,27 @@
 
 
+using System.Reflection;
 using Estrutura.Core.Domain.BinaryTree;
 
 namespace Estrutura.Tests;
 
 public class BinarySearchTreeUnitTests
 {
+
+
     [Fact]
-    public void Test1InsertDuplicateNodeValue()
+    public void Test1TreeStartsEmpty()
+    {
+        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        Assert.True(tree.IsEmpty());
+        Assert.Equal(0, tree.Size(tree.Root));
+    }
+
+
+
+
+    [Fact]
+    public void Test2InsertDuplicateNodeValue()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var node1 = tree.Insert(10);
@@ -18,13 +32,13 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test2InsertRootNode()
+    public void Test3InsertRootNode()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var nodes = tree.InOrderTransversal();
         Assert.Empty(nodes);
         var insertNodeValue = 10;
-        var node =tree.Insert(insertNodeValue);
+        var node = tree.Insert(insertNodeValue);
 
         Assert.NotNull(tree.Root);
         Assert.Equal(node, tree.Root);
@@ -34,7 +48,7 @@ public class BinarySearchTreeUnitTests
 
 
     [Fact]
-    public void Test3InsertNodeRightAndLeft()
+    public void Test4InsertNodeRightAndLeft()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var nodeValue1 = tree.Insert(10);
@@ -49,7 +63,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test4RemoveNonExistentNode()
+    public void Test5RemoveNonExistentNode()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var node2 = tree.Insert(10);
@@ -63,7 +77,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test5RemoveRootNodeWithoutSons()
+    public void Test6RemoveRootNodeWithoutSons()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var rootNode = tree.Insert(10);
@@ -73,7 +87,7 @@ public class BinarySearchTreeUnitTests
 
 
     [Fact]
-    public void Test6RemoveRootNodeWithSons()
+    public void Test7RemoveRootNodeWithSons()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var rootNode = tree.Insert(10);
@@ -84,7 +98,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test7RemoveNodeLeaf()
+    public void Test8RemoveNodeLeaf()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         tree.Insert(10);
@@ -96,11 +110,11 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test8RemoveNodeWithOneSon()
+    public void Test9RemoveNodeWithOneSon()
     {
         var tree = new BinarySearchTree<int>();
         tree.Insert(10);
-        var nodeValue2 =tree.Insert(5);
+        var nodeValue2 = tree.Insert(5);
         var nodeValue1 = tree.Insert(3);
 
         tree.Remove(nodeValue2.Value);
@@ -110,7 +124,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test9RemoveNodeWithBothSons()
+    public void Test10RemoveNodeWithBothSons()
     {
         var tree = new BinarySearchTree<int>();
         var node2 = tree.Insert(10);
@@ -130,7 +144,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test10RemoveRootWithTwoSons()
+    public void Test11RemoveRootWithTwoSons()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var root = tree.Insert(10);
@@ -148,7 +162,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test11TraverseInOrderEmptyTree()
+    public void Test12TraverseInOrderEmptyTree()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var result = tree.InOrderTransversal();
@@ -156,7 +170,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test12TraverseInOrderTree()
+    public void Test13TraverseInOrderTree()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         var node2 = tree.Insert(10);
@@ -171,7 +185,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test13FindSmallestNodeOnTree()
+    public void Test14FindSmallestNodeOnTree()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         tree.Insert(10);
@@ -185,7 +199,68 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test14ClearEmptyTree()
+    public void Test15FindBiggestNodeOnTree()
+    {
+        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        tree.Insert(10);
+        tree.Insert(5);
+        var biggest = tree.Insert(15);
+        tree.Insert(12);
+
+        var biggestResult = tree.FindBiggestNode(tree.Root);
+        Assert.Equal(biggest, biggestResult);
+        Assert.Equal(biggest.Value, biggestResult.Value);
+    }
+
+    [Fact]
+    public void Test16SearchExistenteNodeValue()
+    {
+        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        tree.Insert(10);
+        tree.Insert(5);
+        var node = tree.Insert(15);
+        tree.Insert(12);
+        var SearchedNode = tree.Search(tree.Root, node.Value);
+        Assert.NotNull(SearchedNode);
+        Assert.Equal(node, SearchedNode);
+        Assert.Equal(node.Value, SearchedNode.Value);
+    }
+
+    [Fact]
+    public void Test17SearchNonExistenteNodeValue()
+    {
+        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        tree.Insert(10);
+        tree.Insert(5);
+        tree.Insert(12);
+         var nodeValue = 15;
+        var nonSearchedNode = tree.Search(tree.Root, nodeValue);
+        Assert.Null(nonSearchedNode);
+    }
+
+    [Fact]
+    public void Test18SizeofEmptyTree()
+    {
+        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        Assert.Equal(0, tree.Size(tree.Root));
+    }
+
+       [Fact]
+    public void Test19VerifyingSizeOfTree()
+    {
+        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        int testSize = 0;
+        tree.Insert(14);
+        testSize++;
+        tree.Insert(15);
+        testSize++;
+        tree.Insert(12);
+        testSize++;
+        Assert.Equal(testSize, tree.Size(tree.Root));
+    }
+
+    [Fact]
+    public void Test20ClearEmptyTree()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         Assert.Empty(tree.InOrderTransversal());
@@ -195,7 +270,7 @@ public class BinarySearchTreeUnitTests
     }
 
     [Fact]
-    public void Test15ClearTree()
+    public void Test21ClearTree()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         tree.Insert(10);

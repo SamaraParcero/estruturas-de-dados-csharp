@@ -167,35 +167,10 @@ public class QueueUnitTests
         Assert.True(queue.IsEmpty());
     }
 
-    [Fact]
-    public void Test12ViewQueueReturnsCorrectList()
-    {
-        Queuee<int> queue = new Queuee<int>();
-        int insertNodeValue = 5;
-        int insertNodeValue2 = 8;
-        int insertNodeValue3 = 2;
-
-        queue.Enqueue(insertNodeValue);
-        queue.Enqueue(insertNodeValue2);
-        queue.Enqueue(insertNodeValue3);
-
-        var resultList = queue.ViewQueue();
-        var expectedList = new List<int> { insertNodeValue, insertNodeValue2, insertNodeValue3 };
-
-        Assert.Equal(expectedList, resultList);
-    }
-
-    [Fact]
-    public void Test13ViewQueueEmptyReturnsEmptyList()
-    {
-        Queuee<int> queue = new Queuee<int>();
-        var list = queue.ViewQueue();
-        Assert.Empty(list);
-    }
 
 
     [Fact]
-    public void Test14EnqueueOtherTypeOfNode()
+    public void Test12EnqueueOtherTypeOfNode()
     {
         Queuee<string> queue = new Queuee<string>();
         string a = "A";
@@ -216,7 +191,7 @@ public class QueueUnitTests
 
 
     [Fact]
-    public void Test15ClearReturnsEmptyQueue()
+    public void Test13ClearReturnsEmptyQueue()
     {
         Queuee<int> queue = new Queuee<int>();
         int testSize = 0;
@@ -234,12 +209,33 @@ public class QueueUnitTests
         queue.Enqueue(insertNodeValue3);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        var resultBefore = queue.ViewQueue();
-        var expectedBefore = new List<int> { insertNodeValue, insertNodeValue2, insertNodeValue3 };
-        Assert.Equal(expectedBefore, resultBefore);
+        Assert.False(queue.IsEmpty());
         queue.Clear();
-        Assert.Empty(queue.ViewQueue());
         Assert.True(queue.IsEmpty());
         Assert.Equal(0, queue.Count);
+    }
+
+    [Fact]
+    public void Test14QueueContaisValue()
+    {
+        Queuee<int> queue = new Queuee<int>();
+        int enqueuedValue = 10;
+        queue.Enqueue(5);
+        queue.Enqueue(enqueuedValue);
+        queue.Enqueue(20);
+        var containsResult = queue.Contains(enqueuedValue);
+        Assert.True(containsResult);
+    }
+
+    [Fact]
+    public void Test15QueueDoesNotContaisValue()
+    {
+        Queuee<int> queue = new Queuee<int>();
+        int notEnqueuedValue = 10;
+        queue.Enqueue(5);
+        queue.Enqueue(11);
+        queue.Enqueue(20);
+        var containsResult = queue.Contains(notEnqueuedValue);
+        Assert.False(containsResult);
     }
 }

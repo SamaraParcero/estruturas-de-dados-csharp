@@ -15,14 +15,12 @@ class QueueMain
         queue.Enqueue(20);
         queue.Enqueue(30);
 
-        Console.WriteLine("Actual Queue:");
-        queue.ViewQueue();
+    
         Console.WriteLine();
         Console.WriteLine("Removing element...");
         queue.Dequeue();
 
-        Console.WriteLine("Queue after removing:");
-        queue.ViewQueue();
+       
 
         Console.WriteLine();
         queue.Enqueue(40);
@@ -30,11 +28,9 @@ class QueueMain
         queue.Enqueue(60);
         queue.Enqueue(70);
 
-        Console.WriteLine("Final queue:");
-        queue.ViewQueue();
 
         queue.Clear();
-        queue.ViewQueue();
+
 
 
     }

@@ -13,6 +13,12 @@ public class BinarySearchTree<T> where T : IComparable<T>
 
     }
 
+    public bool IsEmpty()
+    {
+        return Root == null;
+    }
+
+
 
     public Node<T> Insert(T value)
     {
@@ -38,7 +44,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
             if (actual.Left == null)
             {
                 actual.Left = node;
-               //Console.WriteLine("Added" + node.Value + " to the left of " + actual.Value);
+                //Console.WriteLine("Added" + node.Value + " to the left of " + actual.Value);
             }
             else
             {
@@ -127,6 +133,45 @@ public class BinarySearchTree<T> where T : IComparable<T>
             node = node.Left;
         }
         return node;
+    }
+
+    public Node<T> FindBiggestNode(Node<T> node)
+    {
+        while (node.Right != null)
+        {
+            node = node.Right;
+        }
+        return node;
+    }
+
+    public Node<T> Search(Node<T> node, T value)
+    {
+        if (node == null)
+        {
+            return null;
+        }
+
+        if (value.CompareTo(node.Value) < 0)
+        {
+            return Search(node.Left, value);
+        }
+        else if (value.CompareTo(node.Value) > 0)
+        {
+            return Search(node.Right, value);
+        }
+        else
+        {
+            return node;
+        }
+    }
+
+    public int Size(Node<T> node)
+    {
+        if (node == null)
+        {
+            return 0;
+        }
+        return 1 + Size(node.Left) + Size(node.Right); 
     }
 
     public void Clear()

@@ -5,8 +5,8 @@ namespace Estrutura.Core.Domain.Lists;
 public class Listt<T>
 {
 
-    private ListNode<T>? head;
-    private ListNode<T>? tail;
+    public ListNode<T>? head;
+    public ListNode<T>? tail;
     private int size;
 
     public int Count => size;
@@ -17,6 +17,11 @@ public class Listt<T>
         head = null;
         tail = null;
         size = 0;
+    }
+
+    public bool IsEmpty()
+    {
+        return size == 0;
     }
 
     public void Add(T value)
@@ -89,9 +94,10 @@ public class Listt<T>
             {
                 tail = node;
             }
+            size++;
         }
 
-        size++;
+    
     }
 
     public ListNode<T>? Remove(T value)
@@ -224,6 +230,30 @@ public class Listt<T>
         return null;
     }
 
+    public int IndexOf(T value)
+    {
+        if (head == null)
+        {
+            return -1;
+        }
+
+        ListNode<T> actual = head;
+        int index = 0;
+        while (actual != null)
+        {
+
+            if (actual.Value.Equals(value))
+            {
+                return index;
+            }
+            actual = actual.Next;
+            index++;
+        }
+
+        return -1;
+
+    }
+
     public void Clear()
     {
         head = null;
@@ -231,19 +261,7 @@ public class Listt<T>
         size = 0;
     }
 
-    public List<T> ViewList()
-    {
-        List<T> nodes = new List<T>();
-        ListNode<T>? actual = head;
 
-        while (actual != null)
-        {
-            nodes.Add(actual.Value);
-            actual = actual.Next;
-        }
-
-        return nodes;
-    }
 
 
 

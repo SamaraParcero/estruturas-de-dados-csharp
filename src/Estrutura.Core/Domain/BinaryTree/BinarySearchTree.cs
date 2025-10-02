@@ -27,7 +27,6 @@ public class BinarySearchTree<T> where T : IComparable<T>
         if (Root == null)
         {
             Root = node;
-            //Console.WriteLine("Root node added");
         }
         else
         {
@@ -44,7 +43,6 @@ public class BinarySearchTree<T> where T : IComparable<T>
             if (actual.Left == null)
             {
                 actual.Left = node;
-                //Console.WriteLine("Added" + node.Value + " to the left of " + actual.Value);
             }
             else
             {
@@ -56,17 +54,13 @@ public class BinarySearchTree<T> where T : IComparable<T>
             if (actual.Right == null)
             {
                 actual.Right = node;
-                //Console.WriteLine("Added " + node.Value + " to the right " + actual.Value);
             }
             else
             {
                 InsertRecursive(actual.Right, node);
             }
         }
-        else
-        {
-            //Console.WriteLine("Value " + node.Value + " already exists");
-        }
+       
     }
 
     public List<T> InOrderTransversal()
@@ -82,7 +76,6 @@ public class BinarySearchTree<T> where T : IComparable<T>
         {
             InOrderRecursive(node.Left, nodes);
             nodes.Add(node.Value);
-            //Console.Write(node.Value + " ");
             InOrderRecursive(node.Right, nodes);
         }
     }

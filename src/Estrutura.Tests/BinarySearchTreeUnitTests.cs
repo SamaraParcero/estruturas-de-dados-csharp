@@ -55,7 +55,7 @@ public class BinarySearchTreeUnitTests
         var nodeValue2 = tree.Insert(5);
         var nodeValue3 = tree.Insert(15);
         Assert.Equal(nodeValue1, tree.Root);
-        Assert.Equal(nodeValue1.Value, tree.Root.Value);
+        Assert.Equal(nodeValue1.Value, tree.Root!.Value);
         Assert.Equal(nodeValue2, tree.Root.Left);
         Assert.Equal(nodeValue2.Value, tree.Root.Left.Value);
         Assert.Equal(nodeValue3, tree.Root.Right);
@@ -94,7 +94,7 @@ public class BinarySearchTreeUnitTests
         var leftSon = tree.Insert(5);
         tree.Remove(rootNode.Value);
         Assert.Equal(leftSon, tree.Root);
-        Assert.Equal(leftSon.Value, tree.Root.Value);
+        Assert.Equal(leftSon.Value, tree.Root!.Value);
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class BinarySearchTreeUnitTests
 
         tree.Remove(5);
 
-        Assert.Null(tree.Root.Left);
+        Assert.Null(tree.Root!.Left);
     }
 
     [Fact]
@@ -119,7 +119,7 @@ public class BinarySearchTreeUnitTests
 
         tree.Remove(nodeValue2.Value);
 
-        Assert.Equal(nodeValue1, tree.Root.Left);
+        Assert.Equal(nodeValue1, tree.Root!.Left);
         Assert.Equal(nodeValue1.Value, tree.Root.Left.Value);
     }
 
@@ -152,7 +152,7 @@ public class BinarySearchTreeUnitTests
         var rightSon = tree.Insert(15);
         var sucessor = tree.Insert(12);
         tree.Remove(root.Value);
-        Assert.Equal(12, tree.Root.Value);
+        Assert.Equal(12, tree.Root!.Value);
         Assert.Equal(leftSon, tree.Root.Left);
         Assert.Equal(leftSon.Value, tree.Root.Left.Value);
         Assert.Equal(rightSon, tree.Root.Right);
@@ -193,7 +193,7 @@ public class BinarySearchTreeUnitTests
         tree.Insert(15);
         tree.Insert(12);
 
-        var smallestResult = tree.FindSmallestNode(tree.Root);
+        var smallestResult = tree.FindSmallestNode(tree.Root!);
         Assert.Equal(smallest, smallestResult);
         Assert.Equal(smallest.Value, smallestResult.Value);
     }
@@ -207,7 +207,7 @@ public class BinarySearchTreeUnitTests
         var biggest = tree.Insert(15);
         tree.Insert(12);
 
-        var biggestResult = tree.FindBiggestNode(tree.Root);
+        var biggestResult = tree.FindBiggestNode(tree.Root!);
         Assert.Equal(biggest, biggestResult);
         Assert.Equal(biggest.Value, biggestResult.Value);
     }
@@ -220,7 +220,7 @@ public class BinarySearchTreeUnitTests
         tree.Insert(5);
         var node = tree.Insert(15);
         tree.Insert(12);
-        var SearchedNode = tree.Search(tree.Root, node.Value);
+        var SearchedNode = tree.Search(tree.Root!, node.Value);
         Assert.NotNull(SearchedNode);
         Assert.Equal(node, SearchedNode);
         Assert.Equal(node.Value, SearchedNode.Value);
@@ -233,8 +233,8 @@ public class BinarySearchTreeUnitTests
         tree.Insert(10);
         tree.Insert(5);
         tree.Insert(12);
-         var nodeValue = 15;
-        var nonSearchedNode = tree.Search(tree.Root, nodeValue);
+        var nodeValue = 15;
+        var nonSearchedNode = tree.Search(tree.Root!, nodeValue);
         Assert.Null(nonSearchedNode);
     }
 
@@ -245,7 +245,7 @@ public class BinarySearchTreeUnitTests
         Assert.Equal(0, tree.Size(tree.Root));
     }
 
-       [Fact]
+    [Fact]
     public void Test19VerifyingSizeOfTree()
     {
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
@@ -256,7 +256,7 @@ public class BinarySearchTreeUnitTests
         testSize++;
         tree.Insert(12);
         testSize++;
-        Assert.Equal(testSize, tree.Size(tree.Root));
+        Assert.Equal(testSize, tree.Size(tree.Root!));
     }
 
     [Fact]
@@ -265,7 +265,7 @@ public class BinarySearchTreeUnitTests
         BinarySearchTree<int> tree = new BinarySearchTree<int>();
         Assert.Empty(tree.InOrderTransversal());
         tree.Clear();
-        Assert.Equal(tree.Root, null);
+        Assert.Null(tree.Root);
         Assert.Empty(tree.InOrderTransversal());
     }
 
@@ -279,7 +279,7 @@ public class BinarySearchTreeUnitTests
         Assert.NotEmpty(tree.InOrderTransversal());
 
         tree.Clear();
-        Assert.Equal(tree.Root, null);
+        Assert.Null(tree.Root);
         Assert.Empty(tree.InOrderTransversal());
     }
 

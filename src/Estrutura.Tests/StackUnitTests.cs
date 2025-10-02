@@ -37,7 +37,7 @@ public class StackUnitTests
         testSize++;
         Assert.Equal(testSize, stack.Count);
         Assert.Equal(pushedNodeValue, stack.top.Value);
-        Assert.Equal(null, stack.top.Next);
+        Assert.Null(stack.top.Next);
     }
 
 
@@ -55,7 +55,7 @@ public class StackUnitTests
         testSize++;
         Assert.Equal(testSize, stack.Count);
         Assert.Equal(pushedNodeValue2, stack.top.Value);
-        Assert.Equal(pushedNodeValue, stack.top.Next.Value);
+        Assert.Equal(pushedNodeValue, stack.top.Next!.Value);
     }
 
     [Fact]

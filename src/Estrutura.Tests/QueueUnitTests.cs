@@ -36,8 +36,8 @@ public class QueueUnitTests
         queue.Enqueue(insertNodeValue1);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        Assert.Equal(insertNodeValue1, queue.head.Value);
-        Assert.Equal(insertNodeValue1, queue.tail.Value);
+        Assert.Equal(insertNodeValue1, queue.head!.Value);
+        Assert.Equal(insertNodeValue1, queue.tail!.Value);
     }
 
     [Fact]
@@ -53,10 +53,10 @@ public class QueueUnitTests
         queue.Enqueue(insertNodeValue2);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        Assert.Equal(insertNodeValue1, queue.head.Value);
-        Assert.Equal(insertNodeValue2, queue.head.Next.Value);
-        Assert.Equal(insertNodeValue2, queue.tail.Value);
-        Assert.Equal(null, queue.tail.Next);
+        Assert.Equal(insertNodeValue1, queue.head!.Value);
+        Assert.Equal(insertNodeValue2, queue.head.Next!.Value);
+        Assert.Equal(insertNodeValue2, queue.tail!.Value);
+        Assert.Null(queue.tail.Next);
     }
 
     [Fact]
@@ -95,12 +95,12 @@ public class QueueUnitTests
         Assert.Equal(testSize, queue.Count);
         Assert.Equal(insertNodeValue, queue.head!.Value);
         Assert.Equal(insertNodeValue, queue.tail!.Value);
-        Assert.Equal(null, queue.tail.Next);
+        Assert.Null(queue.tail.Next);
 
         var removedNode1 = queue.Dequeue();
         Assert.Equal(insertNodeValue, removedNode1.Value);
-        Assert.Equal(null, queue.head);
-        Assert.Equal(null, queue.tail);
+        Assert.Null(queue.head);
+        Assert.Null(queue.tail);
         Assert.True(queue.IsEmpty());
     }
 

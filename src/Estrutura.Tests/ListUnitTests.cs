@@ -37,8 +37,8 @@ public class ListUnitTests
         testSize++;
         Assert.Equal(testSize, list.Count);
         Assert.False(list.IsEmpty());
-        Assert.Equal(addedNodeValue, list.head.Value);
-        Assert.Equal(addedNodeValue, list.tail.Value);
+        Assert.Equal(addedNodeValue, list.head!.Value);
+        Assert.Equal(addedNodeValue, list.tail!.Value);
     }
 
     [Fact]
@@ -54,9 +54,9 @@ public class ListUnitTests
         testSize++;
         Assert.Equal(testSize, list.Count);
         Assert.False(list.IsEmpty());
-        Assert.Equal(addedNodeValue, list.head.Value);
-        Assert.Equal(addedNodeValue2, list.head.Next.Value);
-        Assert.Equal(addedNodeValue2, list.tail.Value);
+        Assert.Equal(addedNodeValue, list.head!.Value);
+        Assert.Equal(addedNodeValue2, list.head.Next!.Value);
+        Assert.Equal(addedNodeValue2, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
 
@@ -92,9 +92,9 @@ public class ListUnitTests
         list.Insert(0, InsertedNodeValue);
         testSize++;
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(InsertedNodeValue, list.head.Value);
-        Assert.Equal(firstNodeValue, list.head.Next.Value);
-        Assert.Equal(firstNodeValue, list.tail.Value);
+        Assert.Equal(InsertedNodeValue, list.head!.Value);
+        Assert.Equal(firstNodeValue, list.head.Next!.Value);
+        Assert.Equal(firstNodeValue, list.tail!.Value);
     }
 
     [Fact]
@@ -111,7 +111,7 @@ public class ListUnitTests
         list.Insert(2, InsertedNodeValue);
         testSize++;
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(InsertedNodeValue, list.tail.Value);
+        Assert.Equal(InsertedNodeValue, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
 
@@ -133,10 +133,10 @@ public class ListUnitTests
         list.Insert(1, insertedValue);
         testSize++;
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(addedNodeValue1, list.head.Value);
-        Assert.Equal(insertedValue, list.head.Next.Value);
-        Assert.Equal(addedNodeValue2, list.head.Next.Next.Value);
-        Assert.Equal(addedNodeValue3, list.tail.Value);
+        Assert.Equal(addedNodeValue1, list.head!.Value);
+        Assert.Equal(insertedValue, list.head.Next!.Value);
+        Assert.Equal(addedNodeValue2, list.head.Next.Next!.Value);
+        Assert.Equal(addedNodeValue3, list.tail!.Value);
     }
 
     [Fact]
@@ -180,9 +180,9 @@ public class ListUnitTests
         testSize--;
         Assert.NotNull(removedNode);
         Assert.Equal(addedNodeValue, removedNode.Value);
-        Assert.Equal(addedNodeValue2, list.head.Value);
+        Assert.Equal(addedNodeValue2, list.head!.Value);
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(addedNodeValue3, list.tail.Value);
+        Assert.Equal(addedNodeValue3, list.tail!.Value);
     }
 
     [Fact]
@@ -204,9 +204,9 @@ public class ListUnitTests
         Assert.NotNull(removedNode);
         Assert.Equal(addedNodeValue2, removedNode.Value);
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(addedNodeValue, list.head.Value);
-        Assert.Equal(addedNodeValue3, list.head.Next.Value);
-        Assert.Equal(addedNodeValue3, list.tail.Value);
+        Assert.Equal(addedNodeValue, list.head!.Value);
+        Assert.Equal(addedNodeValue3, list.head.Next!.Value);
+        Assert.Equal(addedNodeValue3, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
 
@@ -229,8 +229,8 @@ public class ListUnitTests
         Assert.NotNull(removedNode);
         Assert.Equal(addedNodeValue3, removedNode.Value);
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(addedNodeValue, list.head.Value);
-        Assert.Equal(addedNodeValue2, list.tail.Value);
+        Assert.Equal(addedNodeValue, list.head!.Value);
+        Assert.Equal(addedNodeValue2, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
 
@@ -297,8 +297,8 @@ public class ListUnitTests
         var removedNode = list.RemoveAt(0);
         testSize--;
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(secondNodeValue, list.head.Value);
-        Assert.Equal(secondNodeValue, list.tail.Value);
+        Assert.Equal(secondNodeValue, list.head!.Value);
+        Assert.Equal(secondNodeValue, list.tail!.Value);
         Assert.Null(list.head.Next);
         Assert.Equal(firstNodeValue, removedNode.Value);
     }
@@ -321,7 +321,7 @@ public class ListUnitTests
         testSize--;
         Assert.Equal(testSize, list.Count);
         Assert.Equal(addedNodeValue2, removedNode.Value);
-        Assert.Equal(addedNodeValue3, list.head.Next.Value);
+        Assert.Equal(addedNodeValue3, list.head!.Next!.Value);
     }
 
     [Fact]
@@ -342,8 +342,8 @@ public class ListUnitTests
         testSize--;
         Assert.Equal(testSize, list.Count);
         Assert.Equal(addedNodeValue3, removedNode.Value);
-        Assert.Equal(addedNodeValue2, list.head.Next.Value);
-        Assert.Equal(addedNodeValue2, list.tail.Value);
+        Assert.Equal(addedNodeValue2, list.head!.Next!.Value);
+        Assert.Equal(addedNodeValue2, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
 
@@ -408,7 +408,7 @@ public class ListUnitTests
         var gotNode = list.Get(3);
         Assert.Equal(gotNodeValue, gotNode.Value);
         Assert.Equal(list.tail, gotNode);
-        Assert.Equal(list.tail.Value, gotNode.Value);
+        Assert.Equal(list.tail!.Value, gotNode.Value);
     }
 
     [Fact]

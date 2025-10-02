@@ -41,7 +41,6 @@ public class Queuee<T>
         }
 
         size++;
-        //Console.WriteLine("Enqueued: " + value);
     }
 
     public QueueNode<T> Dequeue()
@@ -60,7 +59,6 @@ public class Queuee<T>
         }
 
         size--;
-        //Console.WriteLine("Dequeued: " + node.Value);
         return node;
     }
 

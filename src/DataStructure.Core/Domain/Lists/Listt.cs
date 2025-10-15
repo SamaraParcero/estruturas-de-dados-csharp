@@ -242,7 +242,7 @@ public class Listt<T>
         while (actual != null)
         {
 
-            if (actual.Value.Equals(value))
+            if (Equals(actual.Value, value))
             {
                 return index;
             }

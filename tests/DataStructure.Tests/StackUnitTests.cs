@@ -5,34 +5,104 @@ namespace DataStructure.Tests;
 public class StackUnitTests
 {
 
-    [Fact]
-    public void Test1StackStartsEmpty()
+    private static Random random = new Random();
+    private static int count = 0;
+
+    private dynamic CreateStack(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        switch (type)
+        {
+            case "int":
+                return new Stackk<int>();
+
+            case "string":
+                return new Stackk<string>();
+
+            case "double":
+                return new Stackk<double>();
+
+            case "float":
+                return new Stackk<float>();
+
+            case "object":
+                return new Stackk<Objectt>();
+
+            default:
+                throw new ArgumentException("Invalid Type");
+        }
+    }
+
+    private dynamic GetValue(string type)
+    {
+        count++;
+
+        switch (type)
+        {
+            case "int":
+                return random.Next(1, 10000) + count;
+
+            case "string":
+                return $"valor{random.Next(1, 10000) + count}";
+
+            case "double":
+                return Math.Round(random.NextDouble() * 10000 + count, 2);
+
+            case "float":
+                return (float)Math.Round(random.NextDouble() * 10000 + count, 2);
+
+            case "object":
+                return new Objectt($"Obj{count}");
+
+            default:
+                throw new ArgumentException("Invalid Type");
+        }
+    }
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test1StackStartsEmpty(string type)
+    {
+        dynamic stack = CreateStack(type);
         Assert.Equal(0, stack.Count);
         Assert.True(stack.IsEmpty());
     }
 
-    [Fact]
-    public void Test2PushIncreasesCount()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test2PushIncreasesCount(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         int testSize = 0;
-        stack.Push(5);
+        dynamic pushValue1 = GetValue(type);
+        stack.Push(pushValue1);
         testSize++;
         Assert.Equal(testSize, stack.Count);
-        stack.Push(10);
+        dynamic pushValue2 = GetValue(type);
+        stack.Push(pushValue2);
         testSize++;
         Assert.Equal(testSize, stack.Count);
         Assert.False(stack.IsEmpty());
     }
 
-    [Fact]
-    public void Test3PushOneValueInAEmptyStack()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test3PushOneValueInAEmptyStack(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         int testSize = 0;
-        int pushedNodeValue = 5;
+        dynamic pushedNodeValue = GetValue(type);
         stack.Push(pushedNodeValue);
         testSize++;
         Assert.Equal(testSize, stack.Count);
@@ -41,13 +111,19 @@ public class StackUnitTests
     }
 
 
-    [Fact]
-    public void Test4PushTwoValuesinAEmptyStack()
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test4PushTwoValuesinAEmptyStack(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         int testSize = 0;
-        int pushedNodeValue = 5;
-        int pushedNodeValue2 = 2;
+        dynamic pushedNodeValue = GetValue(type);
+        dynamic pushedNodeValue2 = GetValue(type);
         stack.Push(pushedNodeValue);
         testSize++;
         Assert.Equal(testSize, stack.Count);
@@ -58,51 +134,75 @@ public class StackUnitTests
         Assert.Equal(pushedNodeValue, stack.top.Next!.Value);
     }
 
-    [Fact]
-    public void Test5PopDecreasesCount()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test5PopDecreasesCount(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         int testSize = 0;
-        stack.Push(7);
+        dynamic pushValue1 = GetValue(type);
+        stack.Push(pushValue1);
         testSize++;
-        stack.Push(8);
+        dynamic pushValue2 = GetValue(type);
+        stack.Push(pushValue2);
         testSize++;
         stack.Pop();
         testSize--;
         Assert.Equal(testSize, stack.Count);
     }
 
-    [Fact]
-    public void Test6PopReturnsCorrectValue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test6PopReturnsCorrectValue(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
-        int top1 = 3;
+        dynamic stack = CreateStack(type);
+        dynamic top1 = GetValue(type);
         stack.Push(top1);
-        int top2 = 6;
+        dynamic top2 = GetValue(type);
         stack.Push(top2);
         Assert.Equal(top2, stack.top.Value);
 
-        int popped = stack.Pop();
+        dynamic popped = stack.Pop();
         Assert.Equal(top2, popped);
-        int popped2 = stack.Pop();
+        dynamic popped2 = stack.Pop();
         Assert.Equal(top1, popped2);
     }
 
-    [Fact]
-    public void Test7PopEmptyStackThrowsException()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test7PopEmptyStackThrowsException(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         var exception = Assert.Throws<InvalidOperationException>(() => stack.Pop());
         Assert.Equal("Stack is empty", exception.Message);
     }
 
 
-    [Fact]
-    public void Test8IsEmptyAfterPops()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test8IsEmptyAfterPops(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
-        stack.Push(5);
-        stack.Push(10);
+        dynamic stack = CreateStack(type);
+        dynamic pushValue1 = GetValue(type);
+        stack.Push(pushValue1);
+        dynamic pushValue2 = GetValue(type);
+        stack.Push(pushValue2);
 
         stack.Pop();
         stack.Pop();
@@ -111,57 +211,56 @@ public class StackUnitTests
     }
 
 
-    [Fact]
-    public void Test9PeekEmptyStackThrowsException()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test9PeekEmptyStackThrowsException(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         var exception = Assert.Throws<InvalidOperationException>(() => stack.Peek());
         Assert.Equal("Stack is empty", exception.Message);
     }
 
-    [Fact]
-    public void Test10PeekReturnsTop()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+
+    public void Test10PeekReturnsTop(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         int testSize = 0;
-        stack.Push(9);
+        dynamic pushValue1 = GetValue(type);
+        stack.Push(pushValue1);
         testSize++;
-        int top = 12;
+        dynamic top = GetValue(type);
         stack.Push(top);
         testSize++;
-        int peeked = stack.Peek();
+        dynamic peeked = stack.Peek();
         Assert.Equal(top, peeked);
         Assert.Equal(testSize, stack.Count);
     }
 
-    [Fact]
-    public void Test11PushOtherTypeOfNode()
-    {
-        Stackk<string> stack = new Stackk<string>();
-        string a = "A";
-        string b = "B";
-        string c = "C";
-        string d = "D";
-        stack.Push(a);
-        stack.Push(b);
-        stack.Push(c);
 
-        Assert.Equal(c, stack.Pop());
-        Assert.Equal(b, stack.Pop());
-        stack.Push(d);
-        Assert.Equal(d, stack.Pop());
-        Assert.Equal(a, stack.Pop());
-    }
-
-    [Fact]
-    public void Test13ClearReturnsEmptyStack()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test11ClearReturnsEmptyStack(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
+        dynamic stack = CreateStack(type);
         int testSize = 0;
-        int pushedNodeValue = 2;
-        int pushedNodeValue2 = 3;
-        int pushedNodeValue3 = 4;
-        int pushedNodeValue4 = 1;
+        dynamic pushedNodeValue = GetValue(type);
+        dynamic pushedNodeValue2 = GetValue(type);
+        dynamic pushedNodeValue3 = GetValue(type);
+        dynamic pushedNodeValue4 = GetValue(type);
         stack.Push(pushedNodeValue);
         testSize++;
         stack.Push(pushedNodeValue2);
@@ -179,26 +278,41 @@ public class StackUnitTests
         Assert.Equal(0, stack.Count); ;
     }
 
-     [Fact]
-    public void Test14StackContaisValue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test12StackContainsValue(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
-        int pushedValue = 10;
-        stack.Push(5);
-        stack.Push(pushedValue);
-        stack.Push(20);
-        var containsResult = stack.Contains(pushedValue);
+        dynamic stack = CreateStack(type);
+        dynamic pushedValue1 = GetValue(type);
+        dynamic pushedValue2 = GetValue(type);
+        dynamic pushedValue3 = GetValue(type);
+        stack.Push(pushedValue1);
+        stack.Push(pushedValue2);
+        stack.Push(pushedValue3);
+        var containsResult = stack.Contains(pushedValue2);
         Assert.True(containsResult);
     }
 
-    [Fact]
-    public void Test15StackDoesNotContaisValue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test13StackDoesNotContainsValue(string type)
     {
-        Stackk<int> stack = new Stackk<int>();
-        int notEnqueuedValue = 10;
-        stack.Push(5);
-        stack.Push(11);
-        stack.Push(20);
+        dynamic stack = CreateStack(type);
+        dynamic pushedValue1 = GetValue(type);
+        dynamic pushedValue2 = GetValue(type);
+        dynamic pushedValue3 = GetValue(type);
+        stack.Push(pushedValue1);
+        stack.Push(pushedValue2);
+        stack.Push(pushedValue3);
+        dynamic notEnqueuedValue = GetValue(type);
         var containsResult = stack.Contains(notEnqueuedValue);
         Assert.False(containsResult);
     }

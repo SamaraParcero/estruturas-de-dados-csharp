@@ -58,6 +58,10 @@ public class BinarySearchTree<T> where T : IComparable<T>
                 InsertRecursive(actual.Right, node);
             }
         }
+        else
+        {
+            throw new InvalidOperationException("The value already exists");
+        }
        
     }
 
@@ -78,9 +82,10 @@ public class BinarySearchTree<T> where T : IComparable<T>
         }
     }
 
-    public void Remove(T value)
+    public Node<T> Remove(T value)
     {
         Root = RemoveRecursive(Root, value);
+        return Root;
     }
 
 
@@ -88,7 +93,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
     {
         if (actualNode == null)
         {
-            return null;
+           throw new InvalidOperationException("The value doesn't exist");
         }
 
         if (value.CompareTo(actualNode.Value) < 0)

@@ -6,32 +6,103 @@ namespace DataStructure.Tests;
 public class QueueUnitTests
 {
 
-    [Fact]
-    public void Test1QueueStartsEmpty()
+    private static Random random = new Random();
+    private static int count = 0;
+
+    private dynamic CreateQueue(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
+        switch (type)
+        {
+            case "int":
+                return new Queuee<int>();
+
+            case "string":
+                return new Queuee<string>();
+
+            case "double":
+                return new Queuee<double>();
+
+            case "float":
+                return new Queuee<float>();
+
+            case "object":
+                return new Queuee<Objectt>();
+
+            default:
+                throw new ArgumentException("Invalid Type");
+        }
+    }
+
+    private dynamic GetValue(string type)
+    {
+        count++;
+
+        switch (type)
+        {
+            case "int":
+                return random.Next(1, 10000) + count;
+
+            case "string":
+                return $"valor{random.Next(1, 10000) + count}";
+
+            case "double":
+                return Math.Round(random.NextDouble() * 10000 + count, 2);
+
+            case "float":
+                return (float)Math.Round(random.NextDouble() * 10000 + count, 2);
+
+            case "object":
+                return new Objectt($"Obj{count}");
+
+            default:
+                throw new ArgumentException("Invalid Type");
+        }
+    }
+
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test1QueueStartsEmpty(string type)
+    {
+        dynamic queue = CreateQueue(type);
         Assert.Equal(0, queue.Count);
         Assert.True(queue.IsEmpty());
     }
 
-    [Fact]
-    public void Test2EnqueueIncreasesCount()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test2EnqueueIncreasesCount(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
+        dynamic queue = CreateQueue(type);
         int testSize = 0;
-        queue.Enqueue(2);
+        dynamic enqueueValue1 = GetValue(type);
+        queue.Enqueue(enqueueValue1);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        queue.Enqueue(5);
+        dynamic enqueueValue2 = GetValue(type);
+        queue.Enqueue(enqueueValue2);
         testSize++;
         Assert.Equal(testSize, queue.Count);
     }
 
-    [Fact]
-    public void Test3EnqueueOneValueinAEmptyQueue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test3EnqueueOneValueinAEmptyQueue(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
-        int insertNodeValue1 = 4;
+        dynamic queue = CreateQueue(type);
+        dynamic insertNodeValue1 = GetValue(type);
         int testSize = 0;
         queue.Enqueue(insertNodeValue1);
         testSize++;
@@ -40,87 +111,113 @@ public class QueueUnitTests
         Assert.Equal(insertNodeValue1, queue.tail!.Value);
     }
 
-    [Fact]
-    public void Test4EnqueueTwoValuesinAEmptyQueue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test4EnqueueTwoValuesinAEmptyQueue(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
-        int insertNodeValue1 = 4;
-        int insertNodeValue2 = 6;
+        dynamic queue = CreateQueue(type);
+        dynamic insertNodeValue1 = GetValue(type);
+        dynamic enqueuedNodeValue2 = GetValue(type);
         int testSize = 0;
         queue.Enqueue(insertNodeValue1);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        queue.Enqueue(insertNodeValue2);
+        queue.Enqueue(enqueuedNodeValue2);
         testSize++;
         Assert.Equal(testSize, queue.Count);
         Assert.Equal(insertNodeValue1, queue.head!.Value);
-        Assert.Equal(insertNodeValue2, queue.head.Next!.Value);
-        Assert.Equal(insertNodeValue2, queue.tail!.Value);
+        Assert.Equal(enqueuedNodeValue2, queue.head.Next!.Value);
+        Assert.Equal(enqueuedNodeValue2, queue.tail!.Value);
         Assert.Null(queue.tail.Next);
     }
 
-    [Fact]
-    public void Test5DequeueDecreasesCount()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test5DequeueDecreasesCount(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
+        dynamic queue = CreateQueue(type);
         int testSize = 0;
-        int insertNodeValue = 10;
-        queue.Enqueue(insertNodeValue);
+        dynamic enqueuedNodeValue = GetValue(type);
+        queue.Enqueue(enqueuedNodeValue);
         testSize++;
-        queue.Enqueue(20);
+        dynamic enqueuedNodeValue2 = GetValue(type);
+        queue.Enqueue(enqueuedNodeValue2);
         testSize++;
-        var removed = queue.Dequeue();
+        dynamic removed = queue.Dequeue();
         testSize--;
-        Assert.Equal(insertNodeValue, removed.Value);
+        Assert.Equal(enqueuedNodeValue, removed.Value);
         Assert.Equal(testSize, queue.Count);
     }
 
-    [Fact]
-    public void Test6DequeueEmptyQueueThrowsException()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test6DequeueEmptyQueueThrowsException(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
+        dynamic queue = CreateQueue(type);
         var exception = Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
         Assert.Equal("Queue is empty", exception.Message);
     }
 
 
-    [Fact]
-    public void Test8DequeueQueueWithOneNode()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test8DequeueQueueWithOneNode(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
+        dynamic queue = CreateQueue(type);
         int testSize = 0;
-        int insertNodeValue = 2;
-        queue.Enqueue(insertNodeValue);
+        dynamic enqueuedNodeValue = GetValue(type);
+        queue.Enqueue(enqueuedNodeValue);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        Assert.Equal(insertNodeValue, queue.head!.Value);
-        Assert.Equal(insertNodeValue, queue.tail!.Value);
+        Assert.Equal(enqueuedNodeValue, queue.head!.Value);
+        Assert.Equal(enqueuedNodeValue, queue.tail!.Value);
         Assert.Null(queue.tail.Next);
 
-        var removedNode1 = queue.Dequeue();
-        Assert.Equal(insertNodeValue, removedNode1.Value);
+        dynamic removedNode1 = queue.Dequeue();
+        Assert.Equal(enqueuedNodeValue, removedNode1.Value);
         Assert.Null(queue.head);
         Assert.Null(queue.tail);
         Assert.True(queue.IsEmpty());
     }
 
-    [Fact]
-    public void Test9DequeueQueueWithALotOfNodes()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test9DequeueQueueWithALotOfNodes(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
+        dynamic queue = CreateQueue(type);
         int testSize = 0;
-        int insertNodeValue1 = 2;
-        int insertNodeValue2 = 3;
-        int insertNodeValue3 = 4;
-        int insertNodeValue4 = 7;
-        int insertNodeValue5 = 1;
+        dynamic insertNodeValue1 = GetValue(type);
+        dynamic enqueuedNodeValue2 = GetValue(type);
+        dynamic enqueuedNodeValue3 = GetValue(type);
+        dynamic insertNodeValue4 = GetValue(type);
+        dynamic insertNodeValue5 = GetValue(type);
         queue.Enqueue(insertNodeValue1);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        queue.Enqueue(insertNodeValue2);
+        queue.Enqueue(enqueuedNodeValue2);
         testSize++;
         Assert.Equal(testSize, queue.Count);
-        queue.Enqueue(insertNodeValue3);
+        queue.Enqueue(enqueuedNodeValue3);
         testSize++;
         Assert.Equal(testSize, queue.Count);
         queue.Enqueue(insertNodeValue4);
@@ -130,36 +227,49 @@ public class QueueUnitTests
         testSize++;
         Assert.Equal(testSize, queue.Count);
 
-        var removedNode1 = queue.Dequeue();
+        dynamic removedNode1 = queue.Dequeue();
         testSize--;
         Assert.Equal(testSize, queue.Count);
         Assert.Equal(insertNodeValue1, removedNode1.Value);
-        Assert.Equal(insertNodeValue2, queue.head!.Value);
+        Assert.Equal(enqueuedNodeValue2, queue.head!.Value);
     }
 
-    [Fact]
-    public void Test10DequeueReturnsCorrectNode()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test10DequeueReturnsCorrectNode(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
-        int insertNodeValue = 2;
-        int insertNodeValue2 = 4;
-        queue.Enqueue(insertNodeValue);
-        queue.Enqueue(insertNodeValue2);
+        dynamic queue = CreateQueue(type);
+        dynamic enqueuedNodeValue = GetValue(type);
+        dynamic enqueuedNodeValue2 = GetValue(type);
+        queue.Enqueue(enqueuedNodeValue);
+        queue.Enqueue(enqueuedNodeValue2);
 
-        var removedNode1 = queue.Dequeue();
-        var removedNode2 = queue.Dequeue();
+        dynamic removedNode1 = queue.Dequeue();
+        dynamic removedNode2 = queue.Dequeue();
 
-        Assert.Equal(insertNodeValue, removedNode1.Value);
-        Assert.Equal(insertNodeValue2, removedNode2.Value);
+        Assert.Equal(enqueuedNodeValue, removedNode1.Value);
+        Assert.Equal(enqueuedNodeValue2, removedNode2.Value);
     }
 
 
-    [Fact]
-    public void Test11IsEmptyAfterDequeues()
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test11IsEmptyAfterDequeues(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
-        queue.Enqueue(1);
-        queue.Enqueue(2);
+        dynamic queue = CreateQueue(type);
+        dynamic enqueuedNodeValue = GetValue(type);
+        dynamic enqueuedNodeValue2 = GetValue(type);
+        queue.Enqueue(enqueuedNodeValue);
+        queue.Enqueue(enqueuedNodeValue2);
 
         queue.Dequeue();
         queue.Dequeue();
@@ -167,46 +277,29 @@ public class QueueUnitTests
         Assert.True(queue.IsEmpty());
     }
 
-
-
-    [Fact]
-    public void Test12EnqueueOtherTypeOfNode()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test12ClearReturnsEmptyQueue(string type)
     {
-        Queuee<string> queue = new Queuee<string>();
-        string a = "A";
-        string b = "B";
-        string c = "C";
-        string d = "D";
-        queue.Enqueue(a);
-        queue.Enqueue(b);
-        queue.Enqueue(c);
-
-        Assert.Equal(a, queue.Dequeue().Value);
-        Assert.Equal(b, queue.Dequeue().Value);
-        queue.Enqueue(d);
-        Assert.Equal(c, queue.Dequeue().Value);
-        Assert.Equal(d, queue.Dequeue().Value);
-    }
-
-
-
-    [Fact]
-    public void Test13ClearReturnsEmptyQueue()
-    {
-        Queuee<int> queue = new Queuee<int>();
+        dynamic queue = CreateQueue(type);
         int testSize = 0;
-        int insertNodeValue = 2;
-        int insertNodeValue2 = 3;
-        int insertNodeValue3 = 4;
-        queue.Enqueue(1);
+        dynamic enqueuedNodeValue1 = GetValue(type);
+        dynamic enqueuedNodeValue2 = GetValue(type);
+        dynamic enqueuedNodeValue3 = GetValue(type);
+        dynamic enqueuedNodeValue4 = GetValue(type);
+        queue.Enqueue(enqueuedNodeValue1);
         testSize++;
-        queue.Enqueue(insertNodeValue);
+        queue.Enqueue(enqueuedNodeValue2);
         testSize++;
-        queue.Enqueue(insertNodeValue2);
+        queue.Enqueue(enqueuedNodeValue3);
         testSize++;
         queue.Dequeue();
         testSize--;
-        queue.Enqueue(insertNodeValue3);
+        queue.Enqueue(enqueuedNodeValue4);
         testSize++;
         Assert.Equal(testSize, queue.Count);
         Assert.False(queue.IsEmpty());
@@ -215,26 +308,41 @@ public class QueueUnitTests
         Assert.Equal(0, queue.Count);
     }
 
-    [Fact]
-    public void Test14QueueContaisValue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test13QueueContainsValue(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
-        int enqueuedValue = 10;
-        queue.Enqueue(5);
-        queue.Enqueue(enqueuedValue);
-        queue.Enqueue(20);
-        var containsResult = queue.Contains(enqueuedValue);
+        dynamic queue = CreateQueue(type);
+        dynamic enqueuedValue1 = GetValue(type);
+        dynamic enqueuedValue2 = GetValue(type);
+        dynamic enqueuedValue3 = GetValue(type);
+        queue.Enqueue(enqueuedValue1);
+        queue.Enqueue(enqueuedValue2);
+        queue.Enqueue(enqueuedValue3);
+        var containsResult = queue.Contains(enqueuedValue2);
         Assert.True(containsResult);
     }
 
-    [Fact]
-    public void Test15QueueDoesNotContaisValue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test14QueueDoesNotContainsValue(string type)
     {
-        Queuee<int> queue = new Queuee<int>();
-        int notEnqueuedValue = 10;
-        queue.Enqueue(5);
-        queue.Enqueue(11);
-        queue.Enqueue(20);
+        dynamic queue = CreateQueue(type);
+        dynamic notEnqueuedValue = GetValue(type);
+        dynamic enqueuedValue1 = GetValue(type);
+        dynamic enqueuedValue2 = GetValue(type);
+        dynamic enqueuedValue3 = GetValue(type);
+        queue.Enqueue(enqueuedValue1);
+        queue.Enqueue(enqueuedValue2);
+        queue.Enqueue(enqueuedValue3);
         var containsResult = queue.Contains(notEnqueuedValue);
         Assert.False(containsResult);
     }

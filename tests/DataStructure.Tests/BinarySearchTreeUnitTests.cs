@@ -1,6 +1,7 @@
 
 
 
+using System.Collections.Immutable;
 using DataStructure.Core.Domain.BinaryTree;
 
 namespace DataStructure.Tests;
@@ -8,273 +9,484 @@ namespace DataStructure.Tests;
 public class BinarySearchTreeUnitTests
 {
 
+    private static Random random = new Random(123);
+    private static int count = 0;
 
-    [Fact]
-    public void Test1TreeStartsEmpty()
+    private dynamic CreateTree(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        switch (type)
+        {
+            case "int":
+                return new BinarySearchTree<int>();
+
+            case "string":
+                return new BinarySearchTree<string>();
+
+            case "double":
+                return new BinarySearchTree<double>();
+
+            case "float":
+                return new BinarySearchTree<float>();
+
+            case "object":
+                return new BinarySearchTree<Objectt>();
+
+            default:
+                throw new ArgumentException("Invalid Type");
+        }
+    }
+
+    private dynamic GetValue(string type)
+    {
+        count++;
+
+        switch (type)
+        {
+            case "int":
+                return random.Next(1, 10000) + count;
+
+            case "string":
+                return $"valor{random.Next(1, 10000) + count}";
+
+            case "double":
+                return Math.Round(random.NextDouble() * 10000 + count, 2);
+
+            case "float":
+                return (float)Math.Round(random.NextDouble() * 10000 + count, 2);
+
+            case "object":
+                return new Objectt($"Obj{count}");
+
+            default:
+                throw new ArgumentException("Invalid Type");
+        }
+    }
+
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test1TreeStartsEmpty(string type)
+    {
+        dynamic tree = CreateTree(type);
         Assert.True(tree.IsEmpty());
         Assert.Equal(0, tree.Size(tree.Root));
     }
 
 
-
-
-    [Fact]
-    public void Test2InsertDuplicateNodeValue()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test2InsertDuplicateNodeValue(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var node1 = tree.Insert(10);
-        tree.Insert(10);
-        var result = tree.InOrderTransversal();
-        Assert.Single(result);
-        Assert.Equal(node1.Value, result[0]);
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        tree.Insert(insertedNodeValue);
+        var exception = Assert.Throws<InvalidOperationException>(() => tree.Insert(insertedNodeValue));
+        Assert.Equal("The value already exists", exception.Message);
     }
 
-    [Fact]
-    public void Test3InsertRootNode()
-    {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var nodes = tree.InOrderTransversal();
-        Assert.Empty(nodes);
-        var insertNodeValue = 10;
-        var node = tree.Insert(insertNodeValue);
 
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test3InsertRootNode(string type)
+    {
+        dynamic tree = CreateTree(type);
+        dynamic nodes = tree.InOrderTransversal();
+        Assert.Empty(nodes);
+        dynamic insertNodeValue = GetValue(type);
+        dynamic node = tree.Insert(insertNodeValue);
         Assert.NotNull(tree.Root);
         Assert.Equal(node, tree.Root);
         Assert.Equal(node.Value, tree.Root.Value);
     }
 
 
-
-    [Fact]
-    public void Test4InsertNodeRightAndLeft()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test4InsertNode(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var nodeValue1 = tree.Insert(10);
-        var nodeValue2 = tree.Insert(5);
-        var nodeValue3 = tree.Insert(15);
-        Assert.Equal(nodeValue1, tree.Root);
-        Assert.Equal(nodeValue1.Value, tree.Root!.Value);
-        Assert.Equal(nodeValue2, tree.Root.Left);
-        Assert.Equal(nodeValue2.Value, tree.Root.Left.Value);
-        Assert.Equal(nodeValue3, tree.Root.Right);
-        Assert.Equal(nodeValue3.Value, tree.Root.Right.Value);
+        dynamic tree = CreateTree(type);
+        dynamic insertedNode = GetValue(type);
+        tree.Insert(insertedNode);
+        var searchedNode = tree.Search(tree.Root, insertedNode);
+        Assert.Equal(insertedNode, searchedNode.Value);
+
     }
 
-    [Fact]
-    public void Test5RemoveNonExistentNode()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test5RemoveNonExistentNode(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var node2 = tree.Insert(10);
-        var node1 = tree.Insert(5);
-        var node3 = tree.Insert(15);
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        dynamic insertedNodeValue2 = GetValue(type);
+        dynamic insertedNodeValue3 = GetValue(type);
+        dynamic nonInsertedNodeValue3 = GetValue(type);
+        tree.Insert(insertedNodeValue);
+        tree.Insert(insertedNodeValue2);
+        tree.Insert(insertedNodeValue3);
 
-        tree.Remove(12);
-        List<int> list = new List<int> { node1.Value, node2.Value, node3.Value };
-        var result = tree.InOrderTransversal();
-        Assert.Equal(list, result);
+        var exception = Assert.Throws<InvalidOperationException>(() => tree.Remove(nonInsertedNodeValue3));
+        Assert.Equal("The value doesn't exist", exception.Message);
+
     }
 
-    [Fact]
-    public void Test6RemoveRootNodeWithoutSons()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test6RemoveRootNodeWithoutSons(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var rootNode = tree.Insert(10);
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        var rootNode = tree.Insert(insertedNodeValue);
         tree.Remove(rootNode.Value);
         Assert.Null(tree.Root);
+        Assert.Empty(tree.InOrderTransversal());
     }
 
 
-    [Fact]
-    public void Test7RemoveRootNodeWithSons()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test7RemoveRootNodeWithSon(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var rootNode = tree.Insert(10);
-        var leftSon = tree.Insert(5);
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        dynamic insertedNodeValue2 = GetValue(type);
+        dynamic rootNode = tree.Insert(insertedNodeValue);
+        var son = tree.Insert(insertedNodeValue2);
         tree.Remove(rootNode.Value);
-        Assert.Equal(leftSon, tree.Root);
-        Assert.Equal(leftSon.Value, tree.Root!.Value);
+        Assert.Equal(son, tree.Root);
+        Assert.Equal(son.Value, tree.Root!.Value);
     }
 
-    [Fact]
-    public void Test8RemoveNodeLeaf()
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test8RemoveNodeLeaf(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        tree.Insert(10);
-        tree.Insert(5);
-
-        tree.Remove(5);
-
-        Assert.Null(tree.Root!.Left);
-    }
-
-    [Fact]
-    public void Test9RemoveNodeWithOneSon()
-    {
-        var tree = new BinarySearchTree<int>();
-        tree.Insert(10);
-        var nodeValue2 = tree.Insert(5);
-        var nodeValue1 = tree.Insert(3);
-
-        tree.Remove(nodeValue2.Value);
-
-        Assert.Equal(nodeValue1, tree.Root!.Left);
-        Assert.Equal(nodeValue1.Value, tree.Root.Left.Value);
-    }
-
-    [Fact]
-    public void Test10RemoveNodeWithBothSons()
-    {
-        var tree = new BinarySearchTree<int>();
-        var node2 = tree.Insert(10);
-        var node1 = tree.Insert(5);
-        var nodeRemoved = tree.Insert(15);
-        var node3 = tree.Insert(12);
-        var node4 = tree.Insert(18);
-
-
-        tree.Remove(nodeRemoved.Value);
-
-
-        var list = new List<int> { node1.Value, node2.Value, node3.Value, node4.Value };
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        dynamic insertedNodeValue2 = GetValue(type);
+        var node1 = tree.Insert(insertedNodeValue);
+        var node2 = tree.Insert(insertedNodeValue2);
+        tree.Remove(insertedNodeValue2);
         var result = tree.InOrderTransversal();
-
-        Assert.Equal(list, result);
+        Assert.Single(result);
+        Assert.Null(node1.Left);
+        Assert.Null(node1.Right);
     }
 
-    [Fact]
-    public void Test11RemoveRootWithTwoSons()
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test9RemoveNode(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var root = tree.Insert(10);
-        var leftSon = tree.Insert(5);
-        var rightSon = tree.Insert(15);
-        var sucessor = tree.Insert(12);
-        tree.Remove(root.Value);
-        Assert.Equal(12, tree.Root!.Value);
-        Assert.Equal(leftSon, tree.Root.Left);
-        Assert.Equal(leftSon.Value, tree.Root.Left.Value);
-        Assert.Equal(rightSon, tree.Root.Right);
-        Assert.Equal(rightSon.Value, tree.Root.Right.Value);
-        var list = new List<int> { leftSon.Value, sucessor.Value, rightSon.Value };
-        Assert.Equal(list, tree.InOrderTransversal());
+        dynamic tree = CreateTree(type);
+        dynamic insertNodeValue1 = GetValue(type);
+        dynamic insertNodeValue2 = GetValue(type);
+        dynamic insertNodeValue3 = GetValue(type);
+        dynamic insertNodeValue4 = GetValue(type);
+        tree.Insert(insertNodeValue1);
+        tree.Insert(insertNodeValue2);
+        tree.Insert(insertNodeValue3);
+        tree.Insert(insertNodeValue4);
+        tree.Remove(insertNodeValue4);
+        var searchedNode = tree.Search(tree.Root, insertNodeValue4);
+        Assert.Null(searchedNode);
     }
 
-    [Fact]
-    public void Test12TraverseInOrderEmptyTree()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test10TraverseInOrderEmptyTree(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        dynamic tree = CreateTree(type);
         var result = tree.InOrderTransversal();
         Assert.Empty(result);
     }
 
-    [Fact]
-    public void Test13TraverseInOrderTree()
-    {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        var node2 = tree.Insert(10);
-        var node1 = tree.Insert(5);
-        var node4 = tree.Insert(15);
-        var node3 = tree.Insert(12);
 
-        List<int> list = new List<int> { node1.Value, node2.Value, node3.Value, node4.Value };
+    [Theory]
+    [InlineData(10, 5, 15)]
+    public void Test11InOrderTransversalCorrectIntList(int insertNodeValue1, int insertNodeValue2, int insertNodeValue3)
+    {
+        var tree = new BinarySearchTree<int>();
+        tree.Insert(insertNodeValue1);
+        tree.Insert(insertNodeValue2);
+        tree.Insert(insertNodeValue3);
+
+        var list = new List<int> { insertNodeValue1, insertNodeValue2, insertNodeValue3 }.OrderBy(node => node).ToList();
         var result = tree.InOrderTransversal();
 
         Assert.Equal(list, result);
     }
 
-    [Fact]
-    public void Test14FindSmallestNodeOnTree()
+    
+    [Theory]
+    [InlineData("banana", "abacaxi", "cogumelo")]
+    public void Test12InOrderTransversalCorrectStringList(string insertNodeValue1, string insertNodeValue2, string insertNodeValue3)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        tree.Insert(10);
-        var smallest = tree.Insert(5);
-        tree.Insert(15);
-        tree.Insert(12);
+        var tree = new BinarySearchTree<string>();
+        tree.Insert(insertNodeValue1);
+        tree.Insert(insertNodeValue2);
+        tree.Insert(insertNodeValue3);
 
-        var smallestResult = tree.FindSmallestNode(tree.Root!);
-        Assert.Equal(smallest, smallestResult);
-        Assert.Equal(smallest.Value, smallestResult.Value);
+        var list = new List<string> { insertNodeValue1, insertNodeValue2, insertNodeValue3 }.OrderBy(node => node).ToList();
+        var result = tree.InOrderTransversal();
+
+        Assert.Equal(list, result);
     }
 
-    [Fact]
-    public void Test15FindBiggestNodeOnTree()
-    {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        tree.Insert(10);
-        tree.Insert(5);
-        var biggest = tree.Insert(15);
-        tree.Insert(12);
 
-        var biggestResult = tree.FindBiggestNode(tree.Root!);
-        Assert.Equal(biggest, biggestResult);
-        Assert.Equal(biggest.Value, biggestResult.Value);
+    [Theory]
+    [InlineData(10.5, 5.2, 15.8)]
+    public void Test13InOrderTransversalCorrectDoubleList(double insertNodeValue1, double insertNodeValue2, double insertNodeValue3)
+    {
+        var tree = new BinarySearchTree<double>();
+        tree.Insert(insertNodeValue1);
+        tree.Insert(insertNodeValue2);
+        tree.Insert(insertNodeValue3);
+
+        var list = new List<double> { insertNodeValue1, insertNodeValue2, insertNodeValue3 }.OrderBy(node => node).ToList();
+        var result = tree.InOrderTransversal();
+
+        Assert.Equal(list, result);
     }
 
-    [Fact]
-    public void Test16SearchExistenteNodeValue()
+    [Theory]
+    [InlineData(10.5f, 5.2f, 15.8f)]
+    public void Test14InOrderTransversalCorrectFloatList(float insertedNodeValue1, float insertedNodeValue2, float insertedNodeValue3)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        tree.Insert(10);
-        tree.Insert(5);
-        var node = tree.Insert(15);
-        tree.Insert(12);
+        var tree = new BinarySearchTree<float>();
+        tree.Insert(insertedNodeValue1);
+        tree.Insert(insertedNodeValue2);
+        tree.Insert(insertedNodeValue3);
+
+        var list = new List<float> { insertedNodeValue1, insertedNodeValue2, insertedNodeValue3 }.OrderBy(node => node).ToList();
+        var result = tree.InOrderTransversal();
+
+        Assert.Equal(list, result);
+    }
+
+
+    [Fact]
+    public void Test15InOrderTransversalCorrectObjectList()
+    {
+        var objectt1 = new Objectt("banana");
+        var objectt2 = new Objectt("abacaxi");
+        var objectt3 = new Objectt("laranja");
+
+        var tree = new BinarySearchTree<Objectt>();
+        tree.Insert(objectt1);
+        tree.Insert(objectt2);
+        tree.Insert(objectt3);
+
+        var list = new List<Objectt> { objectt2, objectt1, objectt3 };
+        var result = tree.InOrderTransversal();
+
+        Assert.Equal(list.Select(node => node.Name), result.Select(node => node.Name));
+    }
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test16FindSmallestNodeOnTree(string type)
+    {
+        dynamic tree = CreateTree(type);
+        dynamic min = GetValue(type);
+        tree.Insert(min);
+
+        for (int i = 0; i < 9; i++)
+        {
+            dynamic insertNode = GetValue(type);
+            tree.Insert(insertNode);
+
+            if (insertNode.CompareTo(min) < 0)
+            {
+                min = insertNode;
+            }
+
+        }
+
+        var smallest = tree.FindSmallestNode(tree.Root!);
+        Assert.Equal(min, smallest.Value);
+    }
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test17FindBiggestNodeOnTree(string type)
+    {
+        dynamic tree = CreateTree(type);
+        dynamic max = GetValue(type);
+        tree.Insert(max);
+
+        for (int i = 0; i < 9; i++)
+        {
+            dynamic insertNode = GetValue(type);
+            tree.Insert(insertNode);
+
+            if (insertNode.CompareTo(max) > 0)
+            {
+                max = insertNode;
+            }
+
+        }
+
+        var biggest = tree.FindBiggestNode(tree.Root!);
+        Assert.Equal(max, biggest.Value);
+
+    }
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test18SearchExistenteNodeValue(string type)
+    {
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        dynamic insertedNodeValue2 = GetValue(type);
+        dynamic insertedNodeValue3 = GetValue(type);
+        dynamic insertedNodeValue4 = GetValue(type);
+        tree.Insert(insertedNodeValue);
+        tree.Insert(insertedNodeValue2);
+        var node = tree.Insert(insertedNodeValue3);
+        tree.Insert(insertedNodeValue4);
         var SearchedNode = tree.Search(tree.Root!, node.Value);
         Assert.NotNull(SearchedNode);
         Assert.Equal(node, SearchedNode);
         Assert.Equal(node.Value, SearchedNode.Value);
     }
 
-    [Fact]
-    public void Test17SearchNonExistenteNodeValue()
+
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test19SearchNonExistenteNodeValue(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        tree.Insert(10);
-        tree.Insert(5);
-        tree.Insert(12);
-        var nodeValue = 15;
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        dynamic insertedNodeValue2 = GetValue(type);
+        dynamic insertedNodeValue3 = GetValue(type);
+        tree.Insert(insertedNodeValue);
+        tree.Insert(insertedNodeValue2);
+        tree.Insert(insertedNodeValue3);
+        var nodeValue = GetValue(type);
         var nonSearchedNode = tree.Search(tree.Root!, nodeValue);
         Assert.Null(nonSearchedNode);
     }
 
-    [Fact]
-    public void Test18SizeofEmptyTree()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test20SizeofEmptyTree(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        dynamic tree = CreateTree(type);
         Assert.Equal(0, tree.Size(tree.Root));
     }
 
-    [Fact]
-    public void Test19VerifyingSizeOfTree()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test21VerifyingSizeOfTree(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        dynamic insertedNodeValue2 = GetValue(type);
+        dynamic insertedNodeValue3 = GetValue(type);
         int testSize = 0;
-        tree.Insert(14);             
+        tree.Insert(insertedNodeValue);
         testSize++;
-        tree.Insert(15);
+        tree.Insert(insertedNodeValue2);
         testSize++;
-        tree.Insert(12);
+        tree.Insert(insertedNodeValue3);
         testSize++;
         Assert.Equal(testSize, tree.Size(tree.Root!));
     }
 
-    [Fact]
-    public void Test20ClearEmptyTree()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test22ClearEmptyTree(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+        dynamic tree = CreateTree(type);
         Assert.Empty(tree.InOrderTransversal());
         tree.Clear();
         Assert.Null(tree.Root);
         Assert.Empty(tree.InOrderTransversal());
     }
 
-    [Fact]
-    public void Test21ClearTree()
+    [Theory]
+    [InlineData("int")]
+    [InlineData("string")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("object")]
+    public void Test23ClearTree(string type)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
-        tree.Insert(10);
-        tree.Insert(5);
+        dynamic tree = CreateTree(type);
+        dynamic insertedNodeValue = GetValue(type);
+        dynamic insertedNodeValue2 = GetValue(type);
+        tree.Insert(insertedNodeValue);
+        tree.Insert(insertedNodeValue2);
 
         Assert.NotEmpty(tree.InOrderTransversal());
 

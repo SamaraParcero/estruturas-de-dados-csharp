@@ -1,8 +1,10 @@
 
 
+using System.Collections;
+
 namespace DataStructure.Core.Domain.Lists;
 
-public class Listt<T>
+public class Listt<T> : IEnumerable<T>
 {
 
     public ListNode<T>? head;
@@ -97,7 +99,7 @@ public class Listt<T>
             size++;
         }
 
-    
+
     }
 
     public ListNode<T>? Remove(T value)
@@ -261,8 +263,16 @@ public class Listt<T>
         size = 0;
     }
 
+    public IEnumerator<T> GetEnumerator()
+    {
+        var actual = head;
+        while (actual != null)
+        {
+            yield return actual.Value!;
+            actual = actual.Next;
+        }
+    }
 
-
-
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 }

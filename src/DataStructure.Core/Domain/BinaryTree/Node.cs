@@ -1,15 +1,7 @@
 namespace DataStructure.Core.Domain.BinaryTree;
 
-public class Node<T>
+public record Node<T>(T Value)
 {
-    public T Value;
-    public Node<T> Left;
-    public Node<T> Right;
-
-    public Node(T value)
-    {
-        Value = value;
-        Left = null;
-        Right = null;
-    }
+    public Node<T> Left { get; set; }
+    public Node<T> Right { get; set; }
 }

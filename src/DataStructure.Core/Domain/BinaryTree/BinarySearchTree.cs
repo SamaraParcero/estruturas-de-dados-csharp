@@ -1,9 +1,11 @@
 
+using DataStructure.Core.Domain.Lists;
+
 namespace DataStructure.Core.Domain.BinaryTree;
 
 public class BinarySearchTree<T> where T : IComparable<T>
 {
-    public Node<T>? Root;
+    internal Node<T>? Root { get; set; }
 
     public BinarySearchTree()
     {
@@ -18,9 +20,9 @@ public class BinarySearchTree<T> where T : IComparable<T>
 
 
 
-    public Node<T> Insert(T value)
+    public T Insert(T value)
     {
-        Node<T> node = new Node<T>(value);
+        var node = new Node<T>(value);
 
         if (Root == null)
         {
@@ -31,7 +33,9 @@ public class BinarySearchTree<T> where T : IComparable<T>
             InsertRecursive(Root, node);
         }
 
-        return node;
+        return node.Value;
+
+
     }
 
     private void InsertRecursive(Node<T> actual, Node<T> node)
@@ -62,17 +66,17 @@ public class BinarySearchTree<T> where T : IComparable<T>
         {
             throw new InvalidOperationException("The value already exists");
         }
-       
+
     }
 
-    public List<T> InOrderTransversal()
+    public Listt<T> InOrderTransversal()
     {
-        List<T> nodes = new List<T>();
+        Listt<T> nodes = new Listt<T>();
         InOrderRecursive(Root, nodes);
         return nodes;
     }
 
-    private void InOrderRecursive(Node<T> node, List<T> nodes)
+    private void InOrderRecursive(Node<T> node, Listt<T> nodes)
     {
         if (node != null)
         {
@@ -82,10 +86,11 @@ public class BinarySearchTree<T> where T : IComparable<T>
         }
     }
 
-    public Node<T> Remove(T value)
+    public T Remove(T value)
     {
+        T removedValueNode = value;
         Root = RemoveRecursive(Root, value);
-        return Root;
+        return removedValueNode;
     }
 
 
@@ -93,7 +98,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
     {
         if (actualNode == null)
         {
-           throw new InvalidOperationException("The value doesn't exist");
+            throw new InvalidOperationException("The value doesn't exist");
         }
 
         if (value.CompareTo(actualNode.Value) < 0)
@@ -115,14 +120,14 @@ public class BinarySearchTree<T> where T : IComparable<T>
                 return actualNode.Left;
             }
             Node<T> successor = FindSmallestNode(actualNode.Right);
-            actualNode.Value = successor.Value;
-            actualNode.Right = RemoveRecursive(actualNode.Right, successor.Value);
+            actualNode = new Node<T>(successor.Value){Left = actualNode.Left, Right = RemoveRecursive(actualNode.Right, successor.Value)};
+
         }
 
         return actualNode;
     }
 
-    public Node<T> FindSmallestNode(Node<T> node)
+    private Node<T> FindSmallestNode(Node<T> node)
     {
         while (node.Left != null)
         {
@@ -131,20 +136,29 @@ public class BinarySearchTree<T> where T : IComparable<T>
         return node;
     }
 
-    public Node<T> FindBiggestNode(Node<T> node)
+    public T FindSmallestValue(Node<T> node)
+    {
+        while (node.Left != null)
+        {
+            node = node.Left;
+        }
+        return node.Value;
+    }
+
+    public T FindBiggestValue(Node<T> node)
     {
         while (node.Right != null)
         {
             node = node.Right;
         }
-        return node;
+        return node.Value;
     }
 
-    public Node<T> Search(Node<T> node, T value)
+    public T Search(Node<T> node, T value)
     {
         if (node == null)
         {
-            return null;
+            throw new InvalidOperationException("The value doesn't exist");
         }
 
         if (value.CompareTo(node.Value) < 0)
@@ -157,7 +171,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
         }
         else
         {
-            return node;
+            return node.Value;
         }
     }
 
@@ -167,7 +181,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
         {
             return 0;
         }
-        return 1 + Size(node.Left) + Size(node.Right); 
+        return 1 + Size(node.Left) + Size(node.Right);
     }
 
     public void Clear()

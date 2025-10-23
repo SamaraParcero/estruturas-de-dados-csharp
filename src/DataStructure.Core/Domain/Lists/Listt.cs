@@ -7,8 +7,8 @@ namespace DataStructure.Core.Domain.Lists;
 public class Listt<T> : IEnumerable<T>
 {
 
-    public ListNode<T>? head;
-    public ListNode<T>? tail;
+    internal ListNode<T>? head;
+    internal ListNode<T>? tail;
     private int size;
 
     public int Count => size;
@@ -61,7 +61,7 @@ public class Listt<T> : IEnumerable<T>
 
     }
 
-    public void Insert(int position, T value)
+    public void Add(int position, T value)
     {
         if (position < 0 || position > size)
         {
@@ -102,11 +102,11 @@ public class Listt<T> : IEnumerable<T>
 
     }
 
-    public ListNode<T>? Remove(T value)
+    public T Remove(T value)
     {
         if (head == null)
         {
-            return null;
+            throw new InvalidOperationException("The value doesn't exist");
         }
 
         if (head.Value!.Equals(value))
@@ -118,7 +118,7 @@ public class Listt<T> : IEnumerable<T>
                 tail = null;
             }
             size--;
-            return node;
+            return node.Value;
         }
 
 
@@ -135,17 +135,17 @@ public class Listt<T> : IEnumerable<T>
                     tail = before;
                 }
                 size--;
-                return nodeList;
+                return nodeList.Value;
             }
 
             before = nodeList;
             nodeList = nodeList.Next;
         }
 
-        return null;
+        throw new InvalidOperationException("The value doesn't exist");
     }
 
-    public ListNode<T> RemoveAt(int position)
+    public T RemoveAt(int position)
     {
         if (position < 0 || position >= size)
         {
@@ -181,11 +181,11 @@ public class Listt<T> : IEnumerable<T>
             }
         }
         size--;
-        return removed;
+        return removed.Value;
 
     }
 
-    public ListNode<T> Get(int position)
+    public T Get(int position)
     {
         if (position < 0 || position >= size)
         {
@@ -195,7 +195,7 @@ public class Listt<T> : IEnumerable<T>
 
         if (position == 0)
         {
-            return head;
+            return head.Value;
         }
         else
         {
@@ -206,16 +206,16 @@ public class Listt<T> : IEnumerable<T>
                 actual = actual.Next;
             }
 
-            return actual;
+            return actual.Value;
         }
 
     }
 
-    public ListNode<T> Find(T value)
+    public T Find(T value)
     {
         if (head == null)
         {
-            return null;
+            throw new InvalidOperationException("The value doesn't exist");
         }
 
         ListNode<T> node = head;
@@ -224,14 +224,14 @@ public class Listt<T> : IEnumerable<T>
         {
             if (node.Value!.Equals(value))
             {
-                return node;
+                return node.Value;
             }
             node = node.Next;
         }
 
-        return null;
+        throw new InvalidOperationException("The value doesn't exist");
     }
-
+    
     public int IndexOf(T value)
     {
         if (head == null)

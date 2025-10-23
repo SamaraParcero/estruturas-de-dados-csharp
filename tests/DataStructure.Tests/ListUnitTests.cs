@@ -109,8 +109,8 @@ public class ListUnitTests
         testSize++;
         Assert.Equal(testSize, list.Count);
         Assert.False(list.IsEmpty());
-        Assert.Equal(addedNodeValue1, list.head!.Value);
-        Assert.Equal(addedNodeValue1, list.tail!.Value);
+        Assert.Equal(addedNodeValue1, list.head.Value);
+        Assert.Equal(addedNodeValue1, list.tail.Value);
     }
 
     [Theory]
@@ -143,13 +143,13 @@ public class ListUnitTests
     [InlineData("double")]
     [InlineData("float")]
     [InlineData("object")]
-    public void Test5InsertInAnInvalidPosition(string type)
+    public void Test5AddInAnInvalidPosition(string type)
     {
         dynamic list = CreateList(type);
         dynamic addedNodeValue1 = GetValue(type);
         dynamic insertNodeValue = GetValue(type);
         list.Add(addedNodeValue1);
-        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => { list.Insert(-1, insertNodeValue); });
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => { list.Add(-1, insertNodeValue); });
         Assert.Contains("Position out of range", exception.Message);
         Assert.Equal("position", exception.ParamName);
     }
@@ -160,13 +160,13 @@ public class ListUnitTests
     [InlineData("double")]
     [InlineData("float")]
     [InlineData("object")]
-    public void Test6InsertInAPositionLargerThanSize(string type)
+    public void Test6AddInAPositionLargerThanSize(string type)
     {
         dynamic list = CreateList(type);
         dynamic addedNodeValue1 = GetValue(type);
         dynamic insertNodeValue1 = GetValue(type);
         list.Add(addedNodeValue1);
-        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => { list.Insert(3, insertNodeValue1); });
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => { list.Add(3, insertNodeValue1); });
         Assert.Contains("Position out of range", exception.Message);
         Assert.Equal("position", exception.ParamName);
     }
@@ -177,7 +177,7 @@ public class ListUnitTests
     [InlineData("double")]
     [InlineData("float")]
     [InlineData("object")]
-    public void Test7InsertInFirstPosition(string type)
+    public void Test7AddInFirstPosition(string type)
     {
         dynamic list = CreateList(type);
         int testSize = 0;
@@ -185,7 +185,7 @@ public class ListUnitTests
         dynamic InsertedNodeValue = GetValue(type);
         list.Add(firstNodeValue);
         testSize++;
-        list.Insert(0, InsertedNodeValue);
+        list.Add(0, InsertedNodeValue);
         testSize++;
         Assert.Equal(testSize, list.Count);
         Assert.Equal(InsertedNodeValue, list.head!.Value);
@@ -199,21 +199,21 @@ public class ListUnitTests
     [InlineData("double")]
     [InlineData("float")]
     [InlineData("object")]
-    public void Test8InsertInLastPosition(string type)
+    public void Test8AddInLastPosition(string type)
     {
         dynamic list = CreateList(type);
         int testSize = 0;
         dynamic firstNodeValue = GetValue(type);
         dynamic addedNodeValue1 = GetValue(type);
-        dynamic InsertedNodeValue2 = GetValue(type);
+        dynamic addedNodeValue2 = GetValue(type);
         list.Add(firstNodeValue);
         testSize++;
         list.Add(addedNodeValue1);
         testSize++;
-        list.Insert(2, InsertedNodeValue2);
+        list.Add(2, addedNodeValue2);
         testSize++;
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(InsertedNodeValue2, list.tail!.Value);
+        Assert.Equal(addedNodeValue2, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
 
@@ -223,7 +223,7 @@ public class ListUnitTests
     [InlineData("double")]
     [InlineData("float")]
     [InlineData("object")]
-    public void Test9InsertInMiddlePosition(string type)
+    public void Test9AddInMiddlePosition(string type)
     {
         dynamic list = CreateList(type);
         int testSize = 0;
@@ -236,12 +236,12 @@ public class ListUnitTests
         testSize++;
         list.Add(addedNodeValue3);
         testSize++;
-        dynamic insertedValue = GetValue(type);
-        list.Insert(1, insertedValue);
+        dynamic addedValue = GetValue(type);
+        list.Add(1, addedValue);
         testSize++;
         Assert.Equal(testSize, list.Count);
         Assert.Equal(addedNodeValue1, list.head!.Value);
-        Assert.Equal(insertedValue, list.head.Next!.Value);
+        Assert.Equal(addedValue, list.head.Next!.Value);
         Assert.Equal(addedNodeValue2, list.head.Next.Next!.Value);
         Assert.Equal(addedNodeValue3, list.tail!.Value);
     }
@@ -252,7 +252,7 @@ public class ListUnitTests
     [InlineData("double")]
     [InlineData("float")]
     [InlineData("object")]
-    public void Test10InsertIncreasesCount(string type)
+    public void Test10AddIncreasesCount(string type)
     {
         dynamic list = CreateList(type);
         int testSize = 0;
@@ -263,7 +263,7 @@ public class ListUnitTests
         testSize++;
         list.Add(addedNodeValue);
         testSize++;
-        list.Insert(2, InsertedNodeValue);
+        list.Add(2, InsertedNodeValue);
         testSize++;
         Assert.Equal(testSize, list.Count);
     }
@@ -278,7 +278,8 @@ public class ListUnitTests
     {
         dynamic list = CreateList(type);
         dynamic removeNodeValue = GetValue(type);
-        Assert.Null(list.Remove(removeNodeValue));
+        var exception = Assert.Throws<InvalidOperationException>(() => list.Remove(removeNodeValue));
+        Assert.Equal("The value doesn't exist", exception.Message);
     }
 
     [Theory]
@@ -303,7 +304,7 @@ public class ListUnitTests
         var removedNode = list.Remove(addedNodeValue);
         testSize--;
         Assert.NotNull(removedNode);
-        Assert.Equal(addedNodeValue, removedNode.Value);
+        Assert.Equal(addedNodeValue, removedNode);
         Assert.Equal(addedNodeValue2, list.head!.Value);
         Assert.Equal(testSize, list.Count);
         Assert.Equal(addedNodeValue3, list.tail!.Value);
@@ -332,13 +333,14 @@ public class ListUnitTests
         var removedNode = list.Remove(addedNodeValue2);
         testSize--;
         Assert.NotNull(removedNode);
-        Assert.Equal(addedNodeValue2, removedNode.Value);
+        Assert.Equal(addedNodeValue2, removedNode);
         Assert.Equal(testSize, list.Count);
         Assert.Equal(addedNodeValue, list.head!.Value);
         Assert.Equal(addedNodeValue3, list.head.Next!.Value);
         Assert.Equal(addedNodeValue3, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -362,12 +364,13 @@ public class ListUnitTests
         var removedNode = list.Remove(addedNodeValue3);
         testSize--;
         Assert.NotNull(removedNode);
-        Assert.Equal(addedNodeValue3, removedNode.Value);
+        Assert.Equal(addedNodeValue3, removedNode);
         Assert.Equal(testSize, list.Count);
         Assert.Equal(addedNodeValue, list.head!.Value);
         Assert.Equal(addedNodeValue2, list.tail!.Value);
         Assert.Null(list.tail.Next);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -385,9 +388,9 @@ public class ListUnitTests
         testSize++;
         list.Add(addedNodeValue2);
         testSize++;
-        var removedNode = list.Remove(GetValue(type));
         Assert.Equal(testSize, list.Count);
-        Assert.Null(removedNode);
+        var exception = Assert.Throws<InvalidOperationException>(() => list.Remove(GetValue(type)));
+        Assert.Equal("The value doesn't exist", exception.Message);
     }
 
 
@@ -412,6 +415,7 @@ public class ListUnitTests
         Assert.Equal(testSize, list.Count);
     }
 
+
     [Theory]
     [InlineData("int")]
     [InlineData("string")]
@@ -427,6 +431,7 @@ public class ListUnitTests
         Assert.Contains("Position out of range", exception.Message);
         Assert.Equal("position", exception.ParamName);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -467,7 +472,7 @@ public class ListUnitTests
         Assert.Equal(secondNodeValue, list.head!.Value);
         Assert.Equal(secondNodeValue, list.tail!.Value);
         Assert.Null(list.head.Next);
-        Assert.Equal(firstNodeValue, removedNode.Value);
+        Assert.Equal(firstNodeValue, removedNode);
     }
 
 
@@ -493,9 +498,10 @@ public class ListUnitTests
         var removedNode = list.RemoveAt(1);
         testSize--;
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(addedNodeValue2, removedNode.Value);
+        Assert.Equal(addedNodeValue2, removedNode);
         Assert.Equal(addedNodeValue3, list.head!.Next!.Value);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -519,7 +525,7 @@ public class ListUnitTests
         var removedNode = list.RemoveAt(2);
         testSize--;
         Assert.Equal(testSize, list.Count);
-        Assert.Equal(addedNodeValue3, removedNode.Value);
+        Assert.Equal(addedNodeValue3, removedNode);
         Assert.Equal(addedNodeValue2, list.head!.Next!.Value);
         Assert.Equal(addedNodeValue2, list.tail!.Value);
         Assert.Null(list.tail.Next);
@@ -545,6 +551,7 @@ public class ListUnitTests
         testSize--;
         Assert.Equal(testSize, list.Count);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -595,8 +602,8 @@ public class ListUnitTests
         dynamic addedNodeValue = GetValue(type);
         list.Add(addedNodeValue);
         var gotNode = list.Get(0);
-        Assert.Equal(list.head, gotNode);
-        Assert.Equal(addedNodeValue, gotNode.Value);
+        Assert.Equal(list.head.Value, gotNode);
+        Assert.Equal(addedNodeValue, gotNode);
     }
 
     [Theory]
@@ -617,10 +624,10 @@ public class ListUnitTests
         list.Add(addedNodeValue3);
         list.Add(gotNodeValue);
         var gotNode = list.Get(3);
-        Assert.Equal(gotNodeValue, gotNode.Value);
-        Assert.Equal(list.tail, gotNode);
-        Assert.Equal(list.tail!.Value, gotNode.Value);
+        Assert.Equal(gotNodeValue, gotNode);
+        Assert.Equal(list.tail!.Value, gotNode);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -632,9 +639,10 @@ public class ListUnitTests
     {
         dynamic list = CreateList(type);
         dynamic findNodeValue = GetValue(type);
-        var result = list.Find(findNodeValue);
-        Assert.Null(result);
+        var exception = Assert.Throws<InvalidOperationException>(() => list.Find(findNodeValue));
+        Assert.Equal("The value doesn't exist", exception.Message);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -650,9 +658,10 @@ public class ListUnitTests
         dynamic findInvalidNodeValue = GetValue(type);
         list.Add(addedNodeValue);
         list.Add(addedNodeValue2);
-        var result = list.Find(findInvalidNodeValue);
-        Assert.Null(result);
+        var exception = Assert.Throws<InvalidOperationException>(() => list.Find(findInvalidNodeValue));
+        Assert.Equal("The value doesn't exist", exception.Message);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -671,8 +680,9 @@ public class ListUnitTests
         list.Add(addedNodeValue3);
         var result = list.Find(addedNodeValue2);
         Assert.NotNull(result);
-        Assert.Equal(addedNodeValue2, result.Value);
+        Assert.Equal(addedNodeValue2, result);
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -760,4 +770,5 @@ public class ListUnitTests
         Assert.True(list.IsEmpty());
         Assert.Equal(0, list.Count); ;
     }
+    
 }

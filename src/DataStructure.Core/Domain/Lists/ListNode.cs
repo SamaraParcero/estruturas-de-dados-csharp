@@ -1,13 +1,7 @@
 namespace DataStructure.Core.Domain.Lists;
 
-public class ListNode<T>
+public record ListNode<T>(T Value)
 {
-    public T Value { get; set; }
     public ListNode<T>? Next { get; set; }
 
-    public ListNode(T value)
-    {
-        Value = value;
-        Next = null;
-    }
 }

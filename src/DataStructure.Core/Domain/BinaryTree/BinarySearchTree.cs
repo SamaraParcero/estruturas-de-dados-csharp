@@ -20,7 +20,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
 
 
 
-    public T Insert(T value)
+    public void Add(T value)
     {
         var node = new Node<T>(value);
 
@@ -30,15 +30,12 @@ public class BinarySearchTree<T> where T : IComparable<T>
         }
         else
         {
-            InsertRecursive(Root, node);
+            AddRecursive(Root, node);
         }
-
-        return node.Value;
-
 
     }
 
-    private void InsertRecursive(Node<T> actual, Node<T> node)
+    private void AddRecursive(Node<T> actual, Node<T> node)
     {
         if (node.Value.CompareTo(actual.Value) < 0)
         {
@@ -48,7 +45,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
             }
             else
             {
-                InsertRecursive(actual.Left, node);
+                AddRecursive(actual.Left, node);
             }
         }
         else if (node.Value.CompareTo(actual.Value) > 0)
@@ -59,7 +56,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
             }
             else
             {
-                InsertRecursive(actual.Right, node);
+                AddRecursive(actual.Right, node);
             }
         }
         else

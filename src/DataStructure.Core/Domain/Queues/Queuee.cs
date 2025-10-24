@@ -41,7 +41,7 @@ public class Queuee<T>
         size++;
     }
 
-    public QueueNode<T> Dequeue()
+    public T Dequeue()
     {
         if (IsEmpty())
         {
@@ -57,7 +57,7 @@ public class Queuee<T>
         }
 
         size--;
-        return node;
+        return node.Value;
     }
 
     public void Clear()
@@ -72,7 +72,7 @@ public class Queuee<T>
         var actual = head;
         while (actual != null)
         {
-            if (EqualityComparer<T>.Default.Equals(actual.Value, value))
+            if (EqualityComparer<T>.Default.Equals(actual!.Value, value))
             {
                 return true;
             }

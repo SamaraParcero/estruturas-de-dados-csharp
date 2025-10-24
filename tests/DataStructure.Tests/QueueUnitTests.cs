@@ -153,7 +153,7 @@ public class QueueUnitTests
         testSize++;
         dynamic removed = queue.Dequeue();
         testSize--;
-        Assert.Equal(enqueuedNodeValue, removed.Value);
+        Assert.Equal(enqueuedNodeValue, removed);
         Assert.Equal(testSize, queue.Count);
     }
 
@@ -190,7 +190,7 @@ public class QueueUnitTests
         Assert.Null(queue.tail.Next);
 
         dynamic removedNode1 = queue.Dequeue();
-        Assert.Equal(enqueuedNodeValue, removedNode1.Value);
+        Assert.Equal(enqueuedNodeValue, removedNode1);
         Assert.Null(queue.head);
         Assert.Null(queue.tail);
         Assert.True(queue.IsEmpty());
@@ -230,7 +230,7 @@ public class QueueUnitTests
         dynamic removedNode1 = queue.Dequeue();
         testSize--;
         Assert.Equal(testSize, queue.Count);
-        Assert.Equal(insertNodeValue1, removedNode1.Value);
+        Assert.Equal(insertNodeValue1, removedNode1);
         Assert.Equal(enqueuedNodeValue2, queue.head!.Value);
     }
 
@@ -251,8 +251,8 @@ public class QueueUnitTests
         dynamic removedNode1 = queue.Dequeue();
         dynamic removedNode2 = queue.Dequeue();
 
-        Assert.Equal(enqueuedNodeValue, removedNode1.Value);
-        Assert.Equal(enqueuedNodeValue2, removedNode2.Value);
+        Assert.Equal(enqueuedNodeValue, removedNode1);
+        Assert.Equal(enqueuedNodeValue2, removedNode2);
     }
 
 
@@ -276,6 +276,7 @@ public class QueueUnitTests
 
         Assert.True(queue.IsEmpty());
     }
+
 
     [Theory]
     [InlineData("int")]
@@ -346,4 +347,6 @@ public class QueueUnitTests
         var containsResult = queue.Contains(notEnqueuedValue);
         Assert.False(containsResult);
     }
+
+    
 }

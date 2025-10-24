@@ -72,7 +72,7 @@ public class Queuee<T>
         var actual = head;
         while (actual != null)
         {
-            if (EqualityComparer<T>.Default.Equals(actual!.Value, value))
+            if (EqualityComparer<T>.Default.Equals(actual.Value, value))
             {
                 return true;
             }
